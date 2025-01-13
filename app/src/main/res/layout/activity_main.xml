@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+
+    >
+
+    <TextView
+        android:id="@+id/hello"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello !" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:layout_marginTop="18dp"
+        android:padding="6dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="2.5dp">
+
+        <TextView
+            android:id="@+id/card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/hello"
+            android:gravity="center"
+            android:text="Card"
+            android:textAlignment="center" />
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:layout_marginTop="18dp"
+        android:padding="6dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="2.5dp">
+
+        <TextView
+            android:id="@+id/balance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/card"
+            android:gravity="center"
+            android:text="Balance"
+            android:textAlignment="center" />
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>
