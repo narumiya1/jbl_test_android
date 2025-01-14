@@ -28,10 +28,7 @@ public class MainMdd extends AppCompatActivity {
             System.out.println("myReader");
             System.out.println(myReader);
 
-            runOnUiThread(() -> {
-                binding.card.setText(myReader.getVersion());
-                binding.balance.setText(myReader.getDeviceSN());
-            });
+
 
 
 
@@ -48,10 +45,18 @@ public class MainMdd extends AppCompatActivity {
             uidLenBytes = uidLen.getBytes(StandardCharsets.UTF_8);
             // Menggunakan encoding default platform
             // uidBytes = uidString.getBytes();
+            System.out.println("uid bytes");
+
             System.out.println(Arrays.toString(uidBytes));
             int[] cardType = {255, 0, 1, 2};
-            myReader.findCard(5000, uidBytes, uidLenBytes, cardType);
+           boolean findr = myReader.findCard(5000, uidBytes, uidLenBytes, cardType);
+            System.out.println("finder");
+            System.out.println(findr);
 
+            runOnUiThread(() -> {
+                binding.card.setText(myReader.getVersion());
+                binding.balance.setText(myReader.getDeviceSN());
+            });
         } catch (Exception e) {
             String msg = e.getMessage();
             System.out.println("getsMessage");
