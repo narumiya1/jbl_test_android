@@ -1,8 +1,24 @@
 pluginManagement {
     repositories {
+        maven {
+            url "https://mobile-repo.mdd.co.id:8081/artifactory/android-library/"
+            credentials {
+                username = "partner"
+                password = "Partner*123#"
+//
+
+            }
+        }
+        maven { url 'https://jitpack.io' }
         google()
         mavenCentral()
         gradlePluginPortal()
+
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
         maven {
             url "https://mobile-repo.mdd.co.id:8081/artifactory/android-library/"
             credentials {
@@ -10,13 +26,9 @@ pluginManagement {
                 password = "Partner*123#"
             }
         }
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
         google()
         mavenCentral()
+
     }
 }
 rootProject.name = "JBL"

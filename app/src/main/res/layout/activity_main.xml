@@ -58,5 +58,44 @@
             android:text="Balance"
             android:textAlignment="center" />
     </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:layout_gravity="center"
+        android:layout_margin="4dp"
+        android:layout_marginTop="18dp"
+        android:padding="6dp"
+        card_view:cardCornerRadius="6dp"
+        card_view:cardElevation="2.5dp">
 
+        <TextView
+            android:id="@+id/timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toEndOf="@+id/card"
+            android:gravity="center"
+            android:text="Timer"
+            android:textAlignment="center" />
+    </androidx.cardview.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_buka_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Buka Fragment" />
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </LinearLayout>
