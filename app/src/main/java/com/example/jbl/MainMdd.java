@@ -65,6 +65,7 @@ public class MainMdd extends AppCompatActivity {
     private static final long START_TIME_IN_MILLIS = 10000;
     private CountDownTimer countDownTimer;
     private boolean mTimerRunning;
+    private String debugToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,14 @@ public class MainMdd extends AppCompatActivity {
         https://daily.dev/blog/retrofit-tutorial-for-android-beginners
         */
         super.onCreate(savedInstanceState);
+        AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
+        nativeLib nativeLibrary = null;
+        try {
+            nativeLibrary = new nativeLib(this, halDriver.USE_WISEASY_ENGGINE);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -102,26 +111,19 @@ public class MainMdd extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
             }
         }
-       String accesToken = "19be782242b4fdde4eeccb8c42e92b2b";
+        // aarDevice
+        String accesToken = "19be782242b4fdde4eeccb8c42e92b2b";
         try {
-            AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
+//            AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
             aarDevice.init(accesToken, DeviceEnvironment.UNLOCK);
-            nativeLib nativeLibrary = new nativeLib(getApplicationContext(), halDriver.USE_WEPOY_ENGGINE);
-            String debugToken = nativeLibrary.generateDebugCert();
-            UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
-                    debugToken, "1");
-            String debugResponse = unlockAarResponse.getData().getDebugResponse();
-
-            readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WEPOY_ENGGINE);
-            myReader.activateDebug(getApplicationContext(), debugResponse);
         } catch (Exception e) {
             String msg = e.getMessage();
-            Log.d("TAG msg",msg +"");
+            Log.d("exception aardevice TAG ", msg + "");
 
         }
-
+        // readerLib
         try {
-            readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WEPOY_ENGGINE);
+            readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WISEASY_ENGGINE);
 //            myReader.unlockCard();
 //            myReader.activateDebug(getApplicationContext(), "8ED5A3240F19B3CEF2E80ECD37A217A9BEBB5E2E28DCD30DF63819243EC6C119A4A31F6821DBB259D4809041E3B42F35F218F992A0FC0B1BD6CA7CEE2D2BFD2B70FDD3A030F0C6C7A698BB3BFAE1973183D4681E9A8F14035FD32443F483C1B5242AE78D49220BB47A7E826A3E0C8DF76A043921C46CA021A251B480E75454064FAEDAF6E0215A5412B468DD903CBCDC183DCB8A89E7A10F272F10110BDDF0108E7612E3F4C2B40DA895634840AD335ECA39BDB5A91C74BE5C6230E2AA7AFEC9CE41278990FD997337A14B205620EF6EA12380024DC6C1751C9003035C9DBE342B611ACFF5D5D8CEC75363FE9D3AEF357E35AC316C4712EB3C5B15C2434D54DCEC94246571D7DD8C5B271DD3136445A89EA6118397AC0BDD978A16F0E70A685A5B7ED527461064E218B04C348FF4D6E568DB0C69CFE1B1EC5B21E1E44C17AAF2E456FE1DD60CC79D619EA140B8A034A0E1017B5652E1BA1520712E9262E51423423988A387F8A474");
           /*  myReader.activateDebug(getApplicationContext(), "8ED5A3240F19B3CEF2E80E\n" +
@@ -251,11 +253,50 @@ public class MainMdd extends AppCompatActivity {
             });
         } catch (Exception e) {
             String msg = e.getMessage();
-            System.out.println("getsMessage");
+            System.out.println("Exception getsMessage readerLib");
 //            binding.card.setText(e.getMessage());
 
             System.out.println(msg);
         }
+
+        // native library
+        try {
+            // nativr Lib
+            debugToken = nativeLibrary.generateDebugCert();
+            System.out.println(debugToken);
+
+            // unlock
+            UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
+                    debugToken, "1");
+            String debugResponse = unlockAarResponse.getData().getDebugResponse();
+            readerLib myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
+            myReader.activateDebug(this, debugResponse);
+//            myReader.findCard(DEFAULT_TIMEOUT, uid, uidLen, cardType);
+
+
+        } catch (Exception e) {
+            System.out.println("Native Library Exception");
+
+            System.out.println(e);
+
+        }
+        binding.btnTesKoneksi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
+                            debugToken, "1");
+                    String debugResponse = unlockAarResponse.getData().getDebugResponse();
+                    readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WEPOY_ENGGINE);
+                    myReader.activateDebug(getApplicationContext(), debugResponse);
+                } catch (Exception e) {
+                    System.out.println("Reader Lib");
+                    System.out.println(e);
+                }
+
+            }
+        });
 
         cardTapHandler = new CardTypeHandler(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
@@ -278,7 +319,7 @@ public class MainMdd extends AppCompatActivity {
          GET List Users
          **/
         // Api Example Reqres.in
-        Call<ResponseUser> call2 = apiInterface.doGetUserList("2");
+        /* Call<ResponseUser> call2 = apiInterface.doGetUserList("2");
         call2.enqueue(new Callback<ResponseUser>() {
             @Override
             public void onResponse(Call<ResponseUser> call, Response<ResponseUser> response) {
@@ -330,6 +371,7 @@ public class MainMdd extends AppCompatActivity {
                 call.cancel();
             }
         });
+        */
 
 //        setContentView(R.layout.activity_main);
 
@@ -341,7 +383,7 @@ public class MainMdd extends AppCompatActivity {
             public void onTick(long millisUntilFinished) {
                 int seconds = (int) (millisUntilFinished / 1000);
                 binding.timer.setText("Seconds remaining: " + seconds);
-                Log.d("TAG Start Timer ",seconds +"");
+                Log.d("TAG Start Timer ", seconds + "");
 
             }
 
@@ -353,6 +395,7 @@ public class MainMdd extends AppCompatActivity {
         }.start();
         mTimerRunning = true;
     }
+
     private void pauseTimer() {
         Log.d("TAG", "pauseTimer");
 
@@ -408,9 +451,11 @@ public class MainMdd extends AppCompatActivity {
                 handleCard(tag);
                 pauseTimer();
                 startTimer();
+
             }
         }
     }
+
     // Handle Card
     private void handleCard(Tag tag) {
 
