@@ -58,11 +58,11 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
 
 //    implementation fileTree(dir: 'libs', include: ['*.aar'])
-    implementation files('libs/wiseasylibrary-release-1.0.2.aar')
-    implementation files('libs/mybanklibrary-release-3.8.19-P18Q.aar')
-    implementation files('libs/aar-deviceid-release-2.0.10.aar')
-    implementation files('libs/nativecripto-release-2.0.1.aar')
-    implementation files('libs/organicdrv-release-2.1.8-P18Q.aar')
+//    implementation files('libs/wiseasylibrary-release-1.0.2.aar')
+//    implementation files('libs/mybanklibrary-release-3.9.1.aar')
+//    implementation files('libs/aar-deviceid-release-2.0.10.aar')
+//    implementation files('libs/nativecripto-release-2.0.1.aar')
+//    implementation files('libs/organicdrv-release-2.1.8-P18Q.aar')
 
 //    implementation fileTree(dir: 'lib', include: ['*.aar'])
 
@@ -75,9 +75,10 @@ dependencies {
 //    implementation 'com.mdd.payment:aar-deviceid-release:3.0.2' // Ganti dengan versi terbaru
 
 
-//    implementation(group: 'com.mdd.payment', name: 'aar-deviceid-release', version: '3.0.2', ext: 'aar')
-//    implementation(group: 'com.mdd.payment', name: 'mybanklibrary-release', version: '3.9.1', ext: 'aar')
-//    implementation(group: 'com.mdd.payment', name: 'organicdrv-release', version: '2.1.4', ext: 'aar')
-//    implementation(group: 'com.mdd.payment', name: 'wiseasylibrary-release', version: '1.0.2', ext: 'aar')
-//    implementation(group: 'com.mdd.payment', name: 'nativecripto-release', version: '2.0.1', ext: 'aar')
+    implementation(group: 'com.mdd.payment', name: 'aar-deviceid-release', version: '3.0.2', ext: 'aar')
+//    implementation(group: 'com.mdd.payment', name: 'mybanklibrary-release', version: '3.7.4-P18Q', ext: 'aar')
+    implementation(group: 'com.mdd.payment', name: 'mybanklibrary-release', version: '3.9.2', ext: 'aar')
+    implementation(group: 'com.mdd.payment', name: 'organicdrv-release', version: '2.1.4', ext: 'aar')
+    implementation(group: 'com.mdd.payment', name: 'wiseasylibrary-release', version: '1.0.2', ext: 'aar')
+    implementation(group: 'com.mdd.payment', name: 'nativecripto-release', version: '2.0.1', ext: 'aar')
 }
