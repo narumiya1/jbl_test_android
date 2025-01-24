@@ -1,21 +1,30 @@
 package com.example.jbl;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.jbl.tools.MandiriEnableHelpers;
+import com.example.jbl.tools.ProgressUtils;
 import com.mdd.aar.deviceid.AarDeviceId;
 import com.mdd.aar.deviceid.DeviceEnvironment;
 import com.mdd.aar.deviceid.http.responses.UnlockAarResponse;
 import com.medicom.dudikov.mybanklibrary.halDriver;
+import com.medicom.dudikov.mybanklibrary.mandiriLib;
 import com.medicom.dudikov.mybanklibrary.nativeLib;
 import com.medicom.dudikov.mybanklibrary.readerLib;
 import com.medicom.organicdrv.OrganicDriver;
+import com.medicom.organicdrv.utilsLib;
 
+import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -29,7 +38,10 @@ public class MainJblMdd extends AppCompatActivity {
     nativeLib nativeLibrary;
     Context context;
     private readerLib myReader;
+    mandiriLib mandiriLibrary;
+
     private TextView tv1;
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,35 +49,13 @@ public class MainJblMdd extends AppCompatActivity {
         setContentView(R.layout.activity_main_jbl_mdd);
 
         tv1 = (TextView) findViewById(R.id.tv1);
+        progressBar = findViewById(R.id.progressBar);
 
-        tv1.setOnClickListener(v -> {
-//            AsyncTask.execute(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        getbalance();
-//                    } catch (Exception e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//            });
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        getbalance();
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }.start();
-
-        });
 
         AarDeviceId aarDevice = new AarDeviceId(this);
+        ProgressUtils.showProgressDialog(MainJblMdd.this);
 
         AsyncTask.execute(() -> {
-
             try {
                 aarDevice.init(accessToken, DeviceEnvironment.PROD);
                 Log.d("aarDevice.init", "success");
@@ -106,7 +96,53 @@ public class MainJblMdd extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+            // Mandiri Library Enable Test di AsyncTask
+            try {
+                mandiriLibrary = new mandiriLib();
+                final int[] errorCode = new int[1];
+
+                MandiriEnableHelpers mandiriEnableHelpers =  new MandiriEnableHelpers(myReader, mandiriLibrary, errorCode);
+                boolean success =  mandiriEnableHelpers.configureMandiri();
+                if (success) {
+                    // Tindakan jika konfigurasi berhasil
+                    Log.d("mandiriEnableHelpers ","success");
+                } else {
+                    // Tindakan jika konfigurasi gagal
+                    Log.d("mandiriEnableHelpers ","fail ");
+
+                }
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+            ProgressUtils.closeProgressDialog();
         });
+        // Test deduct
+        tv1.setOnClickListener(v -> {
+//            ProgressUtils.showProgressDialog(MainJblMdd.this);
+
+//            AsyncTask.execute(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        getbalance();
+//                    } catch (Exception e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//            });
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        getbalance();
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }.start();
+
+        });
+
     }
 
     private void getbalance() throws Exception {
@@ -115,6 +151,8 @@ public class MainJblMdd extends AppCompatActivity {
         int[] cardType = new int[1];
         cardType[0] = OrganicDriver.CARDTYPE_UNKNOWN;
         if (myReader.findCard(5000, uid, uidLen, cardType)) {
+            runOnUiThread(() -> progressBar.setVisibility(View.VISIBLE));
+            // validateMandiri & balance type
             final long start = System.currentTimeMillis();
             final int[] bankType = new int[1];
             final int[] balance = new int[1];
@@ -123,13 +161,102 @@ public class MainJblMdd extends AppCompatActivity {
             Date date = new Date();
             String StrDate = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault()).format(date);
             try {
+                //Get Balance
                 if (myReader.readerGetBalance(cardType[0], StrDate, bankType, balance, cardNumber, errorCode)) {
                     final long stop = System.currentTimeMillis();
-                    System.out.println("bank type " +bankType[0]);
-                    System.out.println("balance type " +balance[0]);
-                    System.out.println("cardNumber type " +cardNumber[0]);
+                    System.out.println("StrDate type " + StrDate);
+                    System.out.println("bank type " + bankType[0]);
+                    System.out.println("balance type " + balance[0]);
+                    System.out.println("cardNumber type " + cardNumber[0]);
+
+
+                    // Mandiri Enabled
+                    //  kode ini dipindah ke Tools MandiriEnableHelpers
+                    /* if (myReader.mandiriEnabled()){
+//                        String samPin = "0123456789ABCDEF";
+                        String samPin = "DED456D4EA4DD92C";
+//                        String samPin = "0D706E800FA5B1";
+//                        String samPin = "0D706E83BA9FF9";
+
+                        byte[] bpin = utilsLib.HexStringToByteArray(samPin);
+                        String mid = "0001";
+                        byte[] bmid = utilsLib.HexStringToByteArray(mid);
+                        String tid = "01234567";
+                        byte[] btid = utilsLib.HexStringToByteArray(tid);
+                        myReader.mandiriDeductSetConfig(bpin, bmid, btid);
+                        myReader.readerMandiriSetSamSlot(OrganicDriver.ORGANIC_SAM1);
+                        myReader.readerMandiriEnableFastDeduct();
+                        int[] errorCodes = new int[1];
+                        if(mandiriLibrary.mandiriLogin(bpin,bmid,btid, errorCodes)){
+                            Log.e("validateMandiri", "true : " +Integer.toHexString(errorCode[0]));
+                        }else{
+                            Log.e("validateMandiri", "false : " +Integer.toHexString(errorCode[0]));
+                        }
+                    } */
+
+                    /**
+                     mandiriLibrary = new mandiriLib();
+                     MandiriEnableHelpers mandiriEnableHelpers = new MandiriEnableHelpers(myReader, mandiriLibrary, errorCode);
+                    boolean success = mandiriEnableHelpers.configureMandiri();
+                    if (success) {
+                        Log.d("status success", "suckess");
+                    } else {
+                        Log.d("status success", "faileds");
+
+                    } **/
+
+                    // Reader Deductv
+
+                    final int[] bankT = new int[bankType[0]];
+                    final int[] balanceT = new int[balance[0]];
+
+                    // Report New
+                    String[] reportsCode = new String[1];
+                    // Report new
+//                    final String reportValuess = "603298409912990400060D706E83B851F52001020001200A0000004E170000020821122239000000E20000831A3EF5";
+                    // Report old
+                    final String reportValuess = "603298280239830300030D706E8648C8C90123456701200A00000010A70000020821110756070000002502031D3795";
+
+                    reportsCode[0] = reportValuess; // Memasukkan nilai string ke dalam array
+
+                    // Error
+                    final int errorValuess = 9000; // Nilai angka dalam bentuk string
+                    final int[] errorNew = new int[1]; // Array dengan ukuran 1
+                    errorNew[0] = errorValuess; // Memasukkan nilai string ke dalam array
+
+                    // Card Number
+                    final String cardNumberValue = cardNumber[0].toString(); // Nilai angka dalam bentuk string
+                    final String[] cardNumberNew = new String[1]; // Array dengan ukuran 1
+                    cardNumberNew[0] = cardNumberValue; // Memasukkan nilai string ke dalam array
+
+                    System.out.println("Card Number [0]: " + cardNumber[0]);
+
+                   /**  String[] cardData = new String[1]; // Array dengan ukuran 1
+                    long cardNumberLong = Long.parseLong(cardData[0]);
+                    BigInteger cardNumberBigInt = new BigInteger(cardData[0]);
+                    System.out.println("cardNumberLong " + cardNumberLong);
+                    System.out.println("cardNumberBigInt " + cardNumberBigInt);
+
+                    cardData[0] = String.valueOf(cardNumberLong); // Memasukkan nilai ke dalam array
+                    System.out.println("Card Data: " + cardData[0]);
+
+                    try {
+                        BigInteger cardNumberAsBigInt = new BigInteger(cardData[0]);
+                        System.out.println("Card Number as BigInteger: " + cardNumberAsBigInt);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Error: Invalid number format for card data.");
+                    } **/
+                    // Deduct
+                    boolean deduckt = myReader.readerDeduct(cardType[0], StrDate, 2, bankT, balanceT, cardNumberNew, reportsCode, errorNew);
+                    Log.d("deduckt result", " " + deduckt);
+                    Log.d("reportsCode result", " " + reportsCode);
+                    // Log 17 - 19 = BCA TEST
+                    // Report Mandiri
+                    boolean reportMandiri =  myReader.getReportMandiri(reportsCode, balanceT,errorNew);
+                    Log.d("reportMandiri result", " " + reportMandiri);
 
                     myReader.beep();
+                    runOnUiThread(() -> progressBar.setVisibility(View.GONE));
                 }
             } catch (Exception e) {
                 e.printStackTrace();
