@@ -8,5 +8,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="Ini adalah Home Fragment" />
+    <Button
+        android:id="@+id/btn_tes_koneksi_fragment"
+        android:text="Tes Fragemnt"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>
