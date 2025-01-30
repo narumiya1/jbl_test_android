@@ -11,16 +11,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.jbl.R;
-import com.example.jbl.databinding.FragmentFirstBinding;
 import com.example.jbl.databinding.FragmentScndBinding;
 import com.example.jbl.tools.SharedViewModel;
 
-public class SecondFragment extends Fragment {
+public class BCAFragment extends Fragment {
 FragmentScndBinding binding;
     private SharedViewModel sharedViewModel;
 
-    public SecondFragment() {
+    public BCAFragment() {
 // Required empty public constructor
     }
 
@@ -43,13 +41,13 @@ FragmentScndBinding binding;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedViewModel.getMid().observe(getViewLifecycleOwner(), fullName -> {
+        sharedViewModel.getMidBca().observe(getViewLifecycleOwner(), fullName -> {
             if (fullName != null) {
                 binding.mid.setText(fullName);
             }
         });
 
-        sharedViewModel.getuId().observe(getViewLifecycleOwner(), fullName2 -> {
+        sharedViewModel.getTidBca().observe(getViewLifecycleOwner(), fullName2 -> {
             if (fullName2 != null) {
                 binding.uid.setText(fullName2);
             }
@@ -69,17 +67,17 @@ FragmentScndBinding binding;
                 return;
             }
 
-            sharedViewModel.getMid().setValue(binding.mid.getText().toString());
-            sharedViewModel.getuId().setValue(binding.uid.getText().toString());
+            sharedViewModel.getMidBca().setValue(binding.mid.getText().toString());
+            sharedViewModel.getTidBca().setValue(binding.uid.getText().toString());
 
-            // Menampilkan semua input dari FirstFragment dan SecondFragment
-            String firstInput = sharedViewModel.getuId().getValue();
+            // Menampilkan semua input dari FirstFragment dan BCAFragment
+            String firstInput = sharedViewModel.getMidBca().getValue();
             String firstInput2 = sharedViewModel.getuId().getValue();
-            String  inputFrags = sharedViewModel.getFullName().getValue();
+            String  inputFrags = sharedViewModel.getTidBca().getValue();
 
             Toast.makeText(requireContext(),
                     "Input FirstFragment: " + firstInput + ", " + firstInput2 +
-                            "\nInput SecondFragment: " + inputFrags,
+                            "\nInput BCAFragment: " + inputFrags,
                     Toast.LENGTH_LONG).show();
 
         });

@@ -84,6 +84,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Buka Fragment" />
+    <Button
+        android:id="@+id/btn_tes_koneksi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tes Koneksi Device"/>
 
     <FrameLayout
         android:id="@+id/fragment_container"

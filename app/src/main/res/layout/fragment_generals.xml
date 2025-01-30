@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Institution Company"
+            android:textSize="16dp" />
+
+        <Spinner
+            android:id="@+id/coursesspinner"
+            android:layout_width="160dp"
+            android:layout_height="50dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/instuition_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:inputType="number"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+                android:gravity="center"
+                android:hint="Institution Code" />
+
+            <EditText
+                android:id="@+id/cabang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:inputType="number"
+
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:gravity="center"
+                android:hint="Cabang" />
+
+            <EditText
+                android:id="@+id/gerbang"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:inputType="number"
+
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:gravity="center"
+                android:hint="Gerbang" />
+
+            <EditText
+                android:id="@+id/gardu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:inputType="number"
+
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:gravity="center"
+                android:hint="Gardu" />
+
+            <EditText
+                android:id="@+id/uid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:inputType="number"
+
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:gravity="center"
+                android:hint="UID" />
+
+            <EditText
+                android:id="@+id/ip_pcs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:gravity="center"
+                android:hint="IP PCS" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipe Gardu"
+                    android:textSize="16dp" />
+
+                <Spinner
+
+                    android:id="@+id/gardu_spinner"
+                    android:layout_width="160dp"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tipe Print"
+                    android:textSize="16dp" />
+
+                <Spinner
+                    android:id="@+id/print_spinner"
+                    android:layout_width="160dp"
+                    android:layout_height="50dp" />
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/btnSendGeneral"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/uid"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="6dp"
+
+                android:background="#000000"
+                android:text="Send General" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,6 +1,7 @@
 package com.example.jbl.views;
 
-import android.os.Bundle;
+import
+        android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.jbl.R;
 import com.example.jbl.databinding.FragmentFirstBinding;
 import com.example.jbl.tools.SharedViewModel;
+import com.google.android.material.tabs.TabLayout;
 
 
-public class FirstFragment extends Fragment {
+public class MandiriFragment extends Fragment {
     FragmentFirstBinding binding;
     private SharedViewModel sharedViewModel;
-    public FirstFragment() {
+    public MandiriFragment() {
 // Required empty public constructor
     }
 
@@ -83,6 +87,7 @@ public class FirstFragment extends Fragment {
                     "Input FirstFragment: " + firstInput + ", " + firstInput2 +
                             "\nInput SecondFragment: " + inputFrags,
                     Toast.LENGTH_LONG).show();
+            MoveToBNIFragment();
 
         });
 
@@ -106,5 +111,28 @@ public class FirstFragment extends Fragment {
                 }
             }
         });*/
+    }
+
+    private void MoveToBNIFragment() {
+        TabLayout tabLayout = requireActivity().findViewById(R.id.simpleTabLayout);
+        tabLayout.getTabAt(2).select(); // Pilih tab kedua
+
+        FragmentManager fm = getActivity().getSupportFragmentManager(); // Use getActivity() to get the Activity's FragmentManager
+        FragmentTransaction ft = fm.beginTransaction();
+
+        // Hide the current fragment (FirstFragment)
+        ft.hide(MandiriFragment.this); // Use FirstFragment.this to reference the current fragment instance
+
+        // Find or create the SecondFragment
+        Fragment secondFragment = fm.findFragmentByTag("BNI");
+        if (secondFragment == null) {
+            secondFragment = new BNIFragment();
+            ft.add(R.id.simpleFrameLayout, secondFragment, "BNI"); // Add if it doesn't exist
+        } else {
+            ft.show(secondFragment); // Show if it already exists
+        }
+
+        ft.addToBackStack(null); // Optional: Add to back stack for navigation
+        ft.commit();
     }
 }
