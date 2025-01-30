@@ -13,9 +13,9 @@ public class MandiriEnableHelpers {
     private int[] errorCode;
 
 
-    public MandiriEnableHelpers(readerLib myReader, mandiriLib mandiriLibraryi, int[] errorCode) {
+    public MandiriEnableHelpers(readerLib myReader, mandiriLib mandiriLibs, int[] errorCode) {
         this.myReader = myReader;
-        this.mandiriLibrary = mandiriLibraryi;
+        this.mandiriLibrary = mandiriLibs;
         this.errorCode = errorCode;
     }
 
