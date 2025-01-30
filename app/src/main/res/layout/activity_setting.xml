@@ -36,6 +36,8 @@
                 <LinearLayout
                     android:layout_width="60dp"
                     android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <ImageView
@@ -43,17 +45,9 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="Setting"
-                        android:textColor="@color/black"
 
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -70,6 +64,7 @@
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="50dp"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <ImageView
@@ -77,25 +72,17 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/database"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="System Admin"
-                        android:textColor="@color/black"
 
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:layout_marginStart="6dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="2dp"
                 android:padding="4dp"
                 card_view:cardCornerRadius="6dp"
 
@@ -104,24 +91,17 @@
                 <LinearLayout
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
                         android:layout_width="34dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/laptop"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="Setting"
-                        android:textColor="@color/black"
 
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -138,6 +118,7 @@
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="50dp"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <ImageView
@@ -145,17 +126,9 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/battery"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="System Admin"
-                        android:textColor="@color/black"
 
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -164,7 +137,7 @@
         <LinearLayout
             android:id="@+id/sencdline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_below="@+id/frrstline"
             android:layout_margin="2dp"
             android:gravity="center">
@@ -181,14 +154,14 @@
 
                 <LinearLayout
                     android:layout_width="20dp"
-                    android:layout_height="50dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="PCS"
@@ -203,7 +176,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="2dp"
+                android:layout_marginStart="4dp"
                 android:padding="4dp"
                 card_view:cardCornerRadius="6dp"
 
@@ -211,14 +184,14 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="50dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="172.20.10.6:12621"
@@ -231,9 +204,9 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_height="35dp"
                 android:layout_gravity="center"
-                android:layout_margin="2dp"
+                android:layout_marginStart="6dp"
                 android:padding="4dp"
                 card_view:cardCornerRadius="6dp"
 
@@ -241,16 +214,16 @@
 
                 <LinearLayout
                     android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
                         android:text="Ip Handed"
                         android:textColor="@color/black"
                         android:textSize="10dp" />
@@ -263,7 +236,7 @@
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="2dp"
+                android:layout_marginStart="6dp"
                 android:padding="4dp"
                 card_view:cardCornerRadius="6dp"
 
@@ -271,14 +244,14 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="50dp"
+                    android:layout_height="35dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="35dp"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="0.0.0.0"
@@ -295,7 +268,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/sencdline"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
 
             android:gravity="center">
 
@@ -311,16 +284,16 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="50dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:gravity="center_vertical"
+                        android:gravity="center"
                         android:text="8 64"
                         android:textColor="@color/black"
                         android:textSize="10dp" />
@@ -352,14 +325,14 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="50dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="Cabang"
@@ -382,14 +355,14 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="50dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:orientation="vertical">
 
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_height="30dp"
                         android:layout_gravity="center"
                         android:gravity="center_vertical"
                         android:text="9"
@@ -405,7 +378,7 @@
         <LinearLayout
             android:id="@+id/ffthdline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="85dp"
             android:layout_below="@+id/frthdline"
             android:layout_margin="2dp"
             android:gravity="center">
@@ -422,9 +395,10 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
+
                     android:layout_gravity="start"
-                    android:gravity="start"
                     android:orientation="vertical">
                     <TextView
 
@@ -467,7 +441,8 @@
 
                 <LinearLayout
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:orientation="vertical">
                     <TextView
@@ -514,9 +489,9 @@
 
                 <LinearLayout
                     android:layout_width="100dp"
-                    android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:gravity="start"
+                    android:layout_height="80dp"
+                    android:gravity="center"
                     android:orientation="vertical">
                     <TextView
 
@@ -559,7 +534,8 @@
 
                 <LinearLayout
                     android:layout_width="50dp"
-                    android:layout_height="match_parent"
+                    android:layout_height="80dp"
+                    android:gravity="center"
                     android:layout_gravity="center"
                     android:orientation="vertical">
                     <TextView
@@ -618,7 +594,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="60dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
@@ -627,14 +603,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/data_transfer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="Setting"
+                        android:text="Kirim Ulang Data"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -652,7 +628,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="70dp"
+                    android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
@@ -661,14 +637,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/two_arrows"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="System Admin"
+                        android:text="Kirim Ulang Data"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -682,7 +658,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
 
             android:layout_below="@+id/sxttline"
             android:gravity="center">
@@ -698,7 +674,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="60dp"
+                    android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
@@ -707,14 +683,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/icons_dbb"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="Setting"
+                        android:text="Delete Gerbang"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -732,7 +708,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="70dp"
+                    android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
@@ -741,14 +717,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/icons_dbb"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="System Admin"
+                        android:text="Delete Buffer"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -765,7 +741,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="70dp"
+                    android:layout_width="90dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
 
@@ -774,14 +750,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/icons_dbb"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="System Admin"
+                        android:text="Delete Data"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -792,9 +768,9 @@
         <LinearLayout
             android:id="@+id/egthline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
 
             android:layout_below="@+id/svntline"
             android:gravity="center">
@@ -810,8 +786,8 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="60dp"
-                    android:layout_height="50dp"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -819,14 +795,14 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="Setting"
+                        android:text="Test Printer"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -844,8 +820,8 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -853,14 +829,47 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="System Admin"
+                        android:text="  Print Data\nTarif Online"
+                        android:textColor="@color/black"
+
+                        android:textSize="10dp" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="8dp"
+                android:padding="4dp"
+                card_view:cardCornerRadius="6dp"
+
+                card_view:cardElevation="2.5dp">
+
+                <LinearLayout
+                    android:layout_width="80dp"
+                    android:layout_height="60dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="top|center"
+                        android:layout_marginTop="2dp"
+                        android:src="@drawable/printer"></ImageView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_margin="2dp"
+                        android:text="  Print Data \nTarif Offline"
                         android:textColor="@color/black"
 
                         android:textSize="10dp" />
@@ -878,7 +887,7 @@
 
                 <LinearLayout
                     android:layout_width="70dp"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:orientation="vertical">
 
                     <ImageView
@@ -886,50 +895,17 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|center"
                         android:layout_margin="2dp"
-                        android:text="System Admin"
+                        android:text="      Print Data\nPerioda Terbuka "
                         android:textColor="@color/black"
 
-                        android:textSize="10dp" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="8dp"
-                android:padding="4dp"
-                card_view:cardCornerRadius="6dp"
-
-                card_view:cardElevation="2.5dp">
-
-                <LinearLayout
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="top|center"
-                        android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="System Admin"
-                        android:textColor="@color/black"
-
-                        android:textSize="10dp" />
+                        android:textSize="9dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -937,9 +913,9 @@
         <LinearLayout
             android:id="@+id/nnthline"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="70dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
 
             android:layout_below="@+id/egthline"
             android:gravity="center">
@@ -964,7 +940,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -998,7 +974,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -1031,7 +1007,7 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
                     <TextView
                         android:layout_width="wrap_content"

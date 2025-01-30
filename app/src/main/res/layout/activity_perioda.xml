@@ -29,6 +29,7 @@
                 card_view:cardElevation="2.5dp">
 
                 <LinearLayout
+                    android:gravity="center"
                     android:layout_width="60dp"
                     android:layout_height="50dp"
                     android:orientation="vertical">
@@ -38,17 +39,8 @@
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/printer"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="Setting"
-                        android:textColor="@color/black"
-
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -65,24 +57,16 @@
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="50dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/database"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="System Admin"
-                        android:textColor="@color/black"
-
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -99,24 +83,16 @@
                 <LinearLayout
                     android:layout_width="60dp"
                     android:layout_height="50dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
                         android:layout_width="34dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/wifi_phone"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="Setting"
-                        android:textColor="@color/black"
-
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -133,24 +109,16 @@
                 <LinearLayout
                     android:layout_width="70dp"
                     android:layout_height="50dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:gravity="center">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="top|center"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/baseline"></ImageView>
+                        android:src="@drawable/battery"></ImageView>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom|center"
-                        android:layout_margin="2dp"
-                        android:text="System Admin"
-                        android:textColor="@color/black"
-
-                        android:textSize="10dp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
