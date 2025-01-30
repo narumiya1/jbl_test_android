@@ -1,8 +1,13 @@
 package com.example.jbl;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.jbl.tools.MandiriEnableHelpers;
 import com.example.jbl.tools.ProgressUtils;
@@ -26,6 +33,7 @@ import com.medicom.organicdrv.utilsLib;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -42,6 +50,7 @@ public class MainJblMdd extends AppCompatActivity {
 
     private TextView tv1;
     ProgressBar progressBar;
+    private static final int PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,40 +59,31 @@ public class MainJblMdd extends AppCompatActivity {
 
         tv1 = (TextView) findViewById(R.id.tv1);
         progressBar = findViewById(R.id.progressBar);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
+            Log.i("","requestPermissions");
 
+        }else{
+            Log.i("","startAycnTask");
+            AarDeviceId aarDevice = new AarDeviceId(this);
+            ProgressUtils.showProgressDialog(MainJblMdd.this);
 
-        AarDeviceId aarDevice = new AarDeviceId(this);
-        ProgressUtils.showProgressDialog(MainJblMdd.this);
+            AsyncTask.execute(() -> {
+                try {
+                    aarDevice.init(accessToken, DeviceEnvironment.PROD);
+                    Log.d("aarDevice.init", "success");
+                } catch (Exception e) {
+                    String msg = e.getMessage();
+                    Log.d("aarDevice.init", "Failed");
+                    e.printStackTrace();
+                }
 
-        AsyncTask.execute(() -> {
-            try {
-                aarDevice.init(accessToken, DeviceEnvironment.PROD);
-                Log.d("aarDevice.init", "success");
-            } catch (Exception e) {
-                String msg = e.getMessage();
-                Log.d("aarDevice.init", "Failed");
-                e.printStackTrace();
-            }
-
-            try {
-                nativeLibrary = new nativeLib(this, idxDriver);
-                nativeLibrary.setRandom("0123456789AB0123456789AB");
-                debugToken = nativeLibrary.generateDebugCert();
-                Log.d("debugToken", debugToken);
-                UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
-                        DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,
-                        "1");
-                String debugResponse = unlockAarResponse.getData().getDebugResponse();
-                Log.d("debugResponse", debugResponse);
-                myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
-                myReader.activateDebug(this, debugResponse);
-            } catch (Exception e) {
-                String msg = e.getMessage();
-                e.printStackTrace();
                 try {
                     nativeLibrary = new nativeLib(this, idxDriver);
                     nativeLibrary.setRandom("0123456789AB0123456789AB");
                     debugToken = nativeLibrary.generateDebugCert();
+                    Log.d("debugToken", debugToken);
                     UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
                             DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,
                             "1");
@@ -91,31 +91,48 @@ public class MainJblMdd extends AppCompatActivity {
                     Log.d("debugResponse", debugResponse);
                     myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
                     myReader.activateDebug(this, debugResponse);
-                } catch (Exception ex) {
-                    String msgs = e.getMessage();
+                } catch (Exception e) {
+                    String msg = e.getMessage();
                     e.printStackTrace();
+                    try {
+                        nativeLibrary = new nativeLib(this, idxDriver);
+                        nativeLibrary.setRandom("0123456789AB0123456789AB");
+                        debugToken = nativeLibrary.generateDebugCert();
+                        UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
+                                DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,
+                                "1");
+                        String debugResponse = unlockAarResponse.getData().getDebugResponse();
+                        Log.d("debugResponse", debugResponse);
+                        myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
+                        myReader.activateDebug(this, debugResponse);
+                    } catch (Exception ex) {
+                        String msgs = e.getMessage();
+                        e.printStackTrace();
+                    }
                 }
-            }
-            // Mandiri Library Enable Test di AsyncTask
-            try {
-                mandiriLibrary = new mandiriLib();
-                final int[] errorCode = new int[1];
+                // Mandiri Library Enable Test di AsyncTask
+                try {
+                    mandiriLibrary = new mandiriLib();
+                    final int[] errorCode = new int[1];
 
-                MandiriEnableHelpers mandiriEnableHelpers =  new MandiriEnableHelpers(myReader, mandiriLibrary, errorCode);
-                boolean success =  mandiriEnableHelpers.configureMandiri();
-                if (success) {
-                    // Tindakan jika konfigurasi berhasil
-                    Log.d("mandiriEnableHelpers ","success");
-                } else {
-                    // Tindakan jika konfigurasi gagal
-                    Log.d("mandiriEnableHelpers ","fail ");
+                    MandiriEnableHelpers mandiriEnableHelpers =  new MandiriEnableHelpers(myReader, mandiriLibrary, errorCode);
+                    boolean success =  mandiriEnableHelpers.configureMandiri();
+                    if (success) {
+                        // Tindakan jika konfigurasi berhasil
+                        Log.d("mandiriEnableHelpers ","success");
+                    } else {
+                        // Tindakan jika konfigurasi gagal
+                        Log.d("mandiriEnableHelpers ","fail ");
 
+                    }
+                } catch (Exception ex) {
+                    throw new RuntimeException(ex);
                 }
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-            ProgressUtils.closeProgressDialog();
-        });
+                ProgressUtils.closeProgressDialog();
+            });
+        }
+
+
         // Test deduct
         tv1.setOnClickListener(v -> {
 //            ProgressUtils.showProgressDialog(MainJblMdd.this);
@@ -142,6 +159,17 @@ public class MainJblMdd extends AppCompatActivity {
             }.start();
 
         });
+
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(MainJblMdd.this, HomeActivity.class));
+        finish();
+
+    }
+    private void startAycnTask() {
+        Log.i("","startAycnTask");
 
     }
 
@@ -263,5 +291,80 @@ public class MainJblMdd extends AppCompatActivity {
             }
             myReader.readerClDisconnect();
         }
+    }
+    private final static int ALL_PERMISSIONS_RESULT = 101;
+    private ArrayList<String> permissionsToRequest;
+    private final ArrayList<String> permissionsRejected = new ArrayList();
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+
+            case ALL_PERMISSIONS_RESULT:
+                for (String perms : permissionsToRequest) {
+                    if (!hasPermission((String) perms)) {
+                        permissionsRejected.add(perms);
+                    }
+                }
+
+                if (permissionsRejected.size() > 0) {
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale((String) permissionsRejected.get(0))) {
+                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                                requestPermissions((String[]) permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                            }
+                                        }
+                                    });
+                            break;
+                        }
+                    }
+
+                }
+
+                break;
+        }
+
+    }
+
+    private boolean hasPermission(String permission) {
+        if (canMakeSmores()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (ContextCompat.checkSelfPermission(getApplicationContext(), permission) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+        return true;
+    }
+
+    private boolean canMakeSmores() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+//        new AlertDialog.Builder(getApplicationContext())
+//                .setMessage(message)
+//                .setPositiveButton("OK", okListener)
+//                .setNegativeButton("Cancel", null)
+//                .create()
+//                .show();
+        new AlertDialog.Builder(this)
+                .setTitle("Izin Diperlukan")
+                .setMessage("Aplikasi ini membutuhkan izin READ_PHONE_STATE untuk melanjutkan.")
+                .setPositiveButton("Izinkan", (dialog, which) ->
+                        ActivityCompat.requestPermissions(this,
+                                new String[]{android.Manifest.permission.READ_PHONE_STATE},
+                                PERMISSION_REQUEST_CODE))
+                .setNegativeButton("Tolak", (dialog, which) -> {
+                    dialog.dismiss();
+                    Toast.makeText(this, "Izin diperlukan untuk melanjutkan.", Toast.LENGTH_SHORT).show();
+                })
+                .create()
+                .show();
     }
 }
