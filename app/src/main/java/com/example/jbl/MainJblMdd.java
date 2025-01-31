@@ -9,8 +9,10 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.jbl.tools.BluetoothConnecHandlers;
 import com.example.jbl.tools.MandiriEnableHelpers;
 import com.example.jbl.tools.ProgressUtils;
 import com.mdd.aar.deviceid.AarDeviceId;
@@ -37,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import wangpos.sdk4.libbasebinder.Printer;
+
 public class MainJblMdd extends AppCompatActivity {
 
     private String debugToken;
@@ -49,16 +54,46 @@ public class MainJblMdd extends AppCompatActivity {
     mandiriLib mandiriLibrary;
 
     private TextView tv1;
+    private Button btnTes;
     ProgressBar progressBar;
     private static final int PERMISSION_REQUEST_CODE = 100;
-
+    Printer mPrinter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_jbl_mdd);
 
         tv1 = (TextView) findViewById(R.id.tv1);
+        btnTes = (Button) findViewById(R.id.tes_printer);
         progressBar = findViewById(R.id.progressBar);
+        btnTes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(){
+                    @Override
+                    public void run() {
+                        mPrinter = new Printer(getApplicationContext());
+                        Log.d("mPrinter",""+mPrinter);
+                        byte[] status = new byte[1];
+                        int[] staats = new int[0];
+                        int result = status[0];
+                        try {
+                            mPrinter.printInit();
+                            mPrinter.getPrinterStatus(staats);
+                            mPrinter.setGrayLevel(3);
+                            mPrinter.clearPrintDataCache();
+                            mPrinter.printString("Content Test Printer",20, Printer.Align.CENTER,true,true);
+                            mPrinter.printPaper(0);
+                            mPrinter.printFinish();
+
+                        } catch (RemoteException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }.start();
+            }
+        });
+
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
@@ -285,6 +320,11 @@ public class MainJblMdd extends AppCompatActivity {
 
                     myReader.beep();
                     runOnUiThread(() -> progressBar.setVisibility(View.GONE));
+
+                    BluetoothConnecHandlers bluetoothConnecHandlers = new BluetoothConnecHandlers(getApplicationContext());
+                    bluetoothConnecHandlers.detectBluetoothPrinter();
+                    bluetoothConnecHandlers.scanBluetoothPrinters(getApplicationContext());
+                    bluetoothConnecHandlers.connectAndPrint("64:22:02:DF:CF");
                 }
             } catch (Exception e) {
                 e.printStackTrace();
