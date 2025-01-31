@@ -60,12 +60,13 @@ public class MainMdd extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
     ProgressDialog progress;
-    private ProgressBar progressBar;
     // Timer 2 Detik
     private static final long START_TIME_IN_MILLIS = 10000;
     private CountDownTimer countDownTimer;
     private boolean mTimerRunning;
     private String debugToken;
+    readerLib myReader;
+    nativeLib nativeLibrary;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,230 +76,10 @@ public class MainMdd extends AppCompatActivity {
         https://daily.dev/blog/retrofit-tutorial-for-android-beginners
         */
         super.onCreate(savedInstanceState);
-        AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
-        nativeLib nativeLibrary = null;
-        try {
-            nativeLibrary = new nativeLib(this, halDriver.USE_WISEASY_ENGGINE);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
-
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        progressBar = findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
 
-        binding.btnBukaFragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.fragment_container, homeFragment);
-                fragmentTransaction.commit();
-            }
-        });
-
-        // Timer
-        startTimer();
-
-        // progress = new ProgressDialog(MainMdd.this);
-        // Permission Template
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
-            }
-        }
-        // aarDevice
-        String accesToken = "19be782242b4fdde4eeccb8c42e92b2b";
-        try {
-//            AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
-            aarDevice.init(accesToken, DeviceEnvironment.UNLOCK);
-        } catch (Exception e) {
-            String msg = e.getMessage();
-            Log.d("exception aardevice TAG ", msg + "");
-
-        }
-        // readerLib
-        try {
-            readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WISEASY_ENGGINE);
-//            myReader.unlockCard();
-//            myReader.activateDebug(getApplicationContext(), "8ED5A3240F19B3CEF2E80ECD37A217A9BEBB5E2E28DCD30DF63819243EC6C119A4A31F6821DBB259D4809041E3B42F35F218F992A0FC0B1BD6CA7CEE2D2BFD2B70FDD3A030F0C6C7A698BB3BFAE1973183D4681E9A8F14035FD32443F483C1B5242AE78D49220BB47A7E826A3E0C8DF76A043921C46CA021A251B480E75454064FAEDAF6E0215A5412B468DD903CBCDC183DCB8A89E7A10F272F10110BDDF0108E7612E3F4C2B40DA895634840AD335ECA39BDB5A91C74BE5C6230E2AA7AFEC9CE41278990FD997337A14B205620EF6EA12380024DC6C1751C9003035C9DBE342B611ACFF5D5D8CEC75363FE9D3AEF357E35AC316C4712EB3C5B15C2434D54DCEC94246571D7DD8C5B271DD3136445A89EA6118397AC0BDD978A16F0E70A685A5B7ED527461064E218B04C348FF4D6E568DB0C69CFE1B1EC5B21E1E44C17AAF2E456FE1DD60CC79D619EA140B8A034A0E1017B5652E1BA1520712E9262E51423423988A387F8A474");
-          /*  myReader.activateDebug(getApplicationContext(), "8ED5A3240F19B3CEF2E80E\n" +
-                    "CD37A217A9BEBB5E2E28D\n" +
-                    "CD30DF63819243EC6C119\n" +
-                    "A4A31F6821DBB259D4809\n" +
-                    "041E3B42F35F218F992A0F\n" +
-                    "C0B1BD6CA7CEE2D2BFD2B\n" +
-                    "70FDD3A030F0C6C7A698B\n" +
-                    "B3BFAE1973183D4681E9A\n" +
-                    "8F14035FD32443F483C1B5\n" +
-                    "242AE78D49220BB47A7E8\n" +
-                    "26A3E0C8DF76A043921C4\n" +
-                    "6CA021A251B480E754540\n" +
-                    "64FAEDAF6E0215A5412B4\n" +
-                    "68DD903CBCDC183DCB8A\n" +
-                    "89E7A10F272F10110BDDF\n" +
-                    "0108E7612E3F4C2B40DA8\n" +
-                    "95634840AD335ECA39BDB\n" +
-                    "5A91C74BE5C6230E2AA7A\n" +
-                    "FEC9CE41278990FD997337\n" +
-                    "A14B205620EF6EA1238002\n" +
-                    "4DC6C1751C9003035C9DB\n" +
-                    "E342B611ACFF5D5D8CEC7\n" +
-                    "5363FE9D3AEF357E35AC3\n" +
-                    "16C4712EB3C5B15C2434D\n" +
-                    "54DCEC94246571D7DD8C5\n" +
-                    "B271DD3136445A89EA611\n" +
-                    "8397AC0BDD978A16F0E70\n" +
-                    "A685A5B7ED527461064E2\n" +
-                    "18B04C348FF4D6E568DB0\n" +
-                    "C69CFE1B1EC5B21E1E44C1\n" +
-                    "7AAF2E456FE1DD60CC79D\n" +
-                    "619EA140B8A034A0E1017\n" +
-                    "B5652E1BA1520712E9262E\n" +
-                    "51423423988A387F8A474"); */
-
-            System.out.println("myReader");
-//            System.out.println(myReader);
-            myReader.readerMandiriEnableFastDeduct();
-            mandiriLib lib = new mandiriLib();
-            boolean enabl = lib.mandiriEnable();
-            boolean mandiriEnable = myReader.mandiriEnabled();
-
-           /* String uidString = "EF115922";
-            byte[] uidBytes;
-            // Menggunakan UTF-8 encoding
-            uidBytes = uidString.getBytes(StandardCharsets.UTF_8);
-            // Menggunakan encoding default platform
-            // uidBytes = uidString.getBytes();
-
-            String uidLen = "16";
-            byte[] uidLenBytes;
-            // Menggunakan UTF-8 encoding
-            uidLenBytes = uidLen.getBytes(StandardCharsets.UTF_8);
-            // Menggunakan encoding default platform
-            // uidBytes = uidString.getBytes();
-            System.out.println("uid bytes");
-
-            System.out.println(Arrays.toString(uidBytes));
-            int[] cardType = {255, 0, 1, 2};
-           boolean findr = myReader.findCard(5000, uidBytes, uidLenBytes, cardType);
-            System.out.println("finder");
-            System.out.println(findr);*/
-            if (mandiriEnable) {
-                byte[] bpin = utilsLib.HexStringToByteArray("DED456D4EA4DD92C");
-                byte[] bmid = utilsLib.HexStringToByteArray("0001");
-                byte[] btid = utilsLib.HexStringToByteArray("01234567");
-                myReader.mandiriDeductSetConfig(bpin, bmid, btid);
-                myReader.readerMandiriSetSamSlot(OrganicDriver.ORGANIC_SAM1);
-                myReader.readerMandiriEnableFastDeduct();
-                int[] errorCode = new int[1];
-                mandiriLib mandiriLibrary = new mandiriLib();
-                if (mandiriLibrary.mandiriLogin(bpin, bmid, btid, errorCode)) {
-                    Log.e("validateMandiri", "true : " + Integer.toHexString(errorCode[0]));
-                } else {
-                    Log.e("validateMandiri", "false : " + Integer.toHexString(errorCode[0]));
-                }
-            } else {
-                byte[] bpin = utilsLib.HexStringToByteArray("0123456789ABCDEF");
-                byte[] bmid = utilsLib.HexStringToByteArray("0001");
-                byte[] btid = utilsLib.HexStringToByteArray("01234567");
-                myReader.mandiriDeductSetConfig(bpin, bmid, btid);
-                myReader.readerMandiriSetSamSlot(OrganicDriver.ORGANIC_SAM1);
-                myReader.readerMandiriEnableFastDeduct();
-                int[] errorCode = new int[1];
-                mandiriLib mandiriLibrary = new mandiriLib();
-                if (mandiriLibrary.mandiriLogin(bpin, bmid, btid, errorCode)) {
-                    Log.e("validateMandiri", "true : " + Integer.toHexString(errorCode[0]));
-                } else {
-                    Log.e("validateMandiri", "false : " + Integer.toHexString(errorCode[0]));
-                }
-            }
-            String uidString = "EF115922";
-            byte[] uidBytes;
-            // Menggunakan UTF-8 encoding
-            uidBytes = uidString.getBytes(StandardCharsets.UTF_8);
-            // Menggunakan encoding default platform
-            // uidBytes = uidString.getBytes();
-
-            String uidLen = "16";
-            byte[] uidLenBytes;
-            // Menggunakan UTF-8 encoding
-            uidLenBytes = uidLen.getBytes(StandardCharsets.UTF_8);
-            // Menggunakan encoding default platform
-            // uidBytes = uidString.getBytes();
-            System.out.println("uid bytes");
-
-            System.out.println(Arrays.toString(uidBytes));
-            int[] cardType = {255, 0, 1, 2};
-            byte[] nilai16 = new byte[]{16};
-            String hexString = "EF115922";
-            byte[] bytes = ByteBuffer.wrap(new byte[hexString.length() / 2])
-                    .putShort((short) Integer.parseInt(hexString.substring(0, 2), 16))
-                    .putShort((short) Integer.parseInt(hexString.substring(2, 4), 16))
-                    .putShort((short) Integer.parseInt(hexString.substring(4, 6), 16))
-                    .putShort((short) Integer.parseInt(hexString.substring(6, 8), 16))
-                    .array();
-
-            System.out.println(Arrays.toString(bytes));
-            boolean findr = myReader.findCard(9000, nilai16, bytes, cardType);
-            System.out.println("finder");
-            System.out.println(findr);
-            runOnUiThread(() -> {
-//                binding.card.setText(myReader.getVersion());
-//                binding.balance.setText(myReader.getDeviceSN());
-            });
-        } catch (Exception e) {
-            String msg = e.getMessage();
-            System.out.println("Exception getsMessage readerLib");
-//            binding.card.setText(e.getMessage());
-
-            System.out.println(msg);
-        }
-
-        // native library
-        try {
-            // nativr Lib
-            debugToken = nativeLibrary.generateDebugCert();
-            System.out.println(debugToken);
-
-            // unlock
-            UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
-                    debugToken, "1");
-            String debugResponse = unlockAarResponse.getData().getDebugResponse();
-            readerLib myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
-            myReader.activateDebug(this, debugResponse);
-//            myReader.findCard(DEFAULT_TIMEOUT, uid, uidLen, cardType);
-
-
-        } catch (Exception e) {
-            System.out.println("Native Library Exception");
-
-            System.out.println(e);
-
-        }
-        binding.btnTesKoneksi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                try {
-                    UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
-                            debugToken, "1");
-                    String debugResponse = unlockAarResponse.getData().getDebugResponse();
-                    readerLib myReader = new readerLib(getApplicationContext(), true, halDriver.USE_WEPOY_ENGGINE);
-                    myReader.activateDebug(getApplicationContext(), debugResponse);
-                } catch (Exception e) {
-                    System.out.println("Reader Lib");
-                    System.out.println(e);
-                }
-
-            }
-        });
-
-        cardTapHandler = new CardTypeHandler(this);
+       /* cardTapHandler = new CardTypeHandler(this);
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         if (!cardTapHandler.isNfcSupported()) {
@@ -308,12 +89,12 @@ public class MainMdd extends AppCompatActivity {
         } else {
             Toast.makeText(this, "NFC  didukung di perangkat ini", Toast.LENGTH_SHORT).show();
 
-        }
+        } */
 
-        pendingIntent = PendingIntent.getActivity(
+        /*pendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_UPDATE_CURRENT
         );
-        apiInterface = APIClient.getClient().create(ApiInterface.class);
+        apiInterface = APIClient.getClient().create(ApiInterface.class); */
 
         /**
          GET List Users
@@ -373,7 +154,80 @@ public class MainMdd extends AppCompatActivity {
         });
         */
 
-//        setContentView(R.layout.activity_main);
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.READ_PHONE_STATE}, PERMISSION_REQUEST_CODE);
+            }
+        }
+
+
+        binding.btnBukaFragment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                HomeFragment homeFragment = new HomeFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.fragment_container, homeFragment);
+                fragmentTransaction.commit();
+            }
+        });
+
+
+
+        AarDeviceId aarDevice = new AarDeviceId(getApplicationContext());
+        try {
+            nativeLibrary = new nativeLib(this, halDriver.USE_WISEASY_ENGGINE);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
+        // native library
+        try {
+            // nativr Lib
+            debugToken = nativeLibrary.generateDebugCert();
+            System.out.println(debugToken);
+
+            // unlock
+            UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("19be782242b4fdde4eeccb8c42e92b2b", DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(),
+                    debugToken, "1");
+            String debugResponse = unlockAarResponse.getData().getDebugResponse();
+            myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
+            myReader.activateDebug(this, debugResponse);
+
+
+        } catch (Exception e) {
+            System.out.println("Native Library Exception");
+
+            System.out.println(e);
+
+        }
+        binding.btnTesKoneksi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                try {
+                    byte[] uid = new byte[16];
+                    byte[] uidLen = new byte[1];
+                    int[] cardType = new int[1];
+                    cardType[0] = OrganicDriver.CARDTYPE_UNKNOWN;
+                    boolean result = myReader.findCard(5000, uid, uidLen, cardType);
+
+                    System.out.println( uid);
+                    System.out.println( cardType);
+
+                    Toast.makeText(MainMdd.this, "UID "+uid+" result = " + result, Toast.LENGTH_SHORT).show();
+
+
+                } catch (Exception e) {
+                    System.out.println("Reader Lib");
+                    System.out.println(e);
+                }
+
+            }
+        });
 
     }
 
@@ -407,11 +261,11 @@ public class MainMdd extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         // Mulai kembali timer jika activity di-resume
-        if (mTimerRunning) {
-            startTimer();
-        }
+//        if (mTimerRunning) {
+//            startTimer();
+//        }
         // Intent untuk mendeteksi NFC
-        PendingIntent pendingIntent = PendingIntent.getActivity(
+      /*  PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter[] intentFilters = new IntentFilter[]{};
         String[][] techLists = new String[][]{
@@ -420,14 +274,14 @@ public class MainMdd extends AppCompatActivity {
 
         if (nfcAdapter != null) {
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFilters, techLists);
-        }
+        } */
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         // Timer
-        pauseTimer();
+//        pauseTimer();
         if (nfcAdapter != null) {
             nfcAdapter.disableForegroundDispatch(this);
         }
@@ -441,7 +295,7 @@ public class MainMdd extends AppCompatActivity {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
             cardTapHandler.onCardTapped(tag);
         } */
-        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
+     /*   if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
             if (tag != null) {
@@ -449,11 +303,12 @@ public class MainMdd extends AppCompatActivity {
 //                progressBar.setVisibility(View.VISIBLE);
 //                progress.setCancelable(false);
                 handleCard(tag);
-                pauseTimer();
-                startTimer();
+//                pauseTimer();
+//                startTimer();
 
             }
         }
+    */
     }
 
     // Handle Card
