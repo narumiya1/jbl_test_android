@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.jbl.Config;
 import com.example.jbl.R;
 import com.example.jbl.databinding.FragmentGeneralsBinding;
 import com.example.jbl.tools.SharedViewModel;
@@ -24,10 +25,11 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener  {
+public class GeneralFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     FragmentGeneralsBinding fragmentGeneralsBinding;
     private SharedViewModel sharedViewModel;
     int gardu = 0;
+    private Config cfg;
 
 
     @Nullable
@@ -49,7 +51,7 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
         fragmentGeneralsBinding.coursesspinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
         // Set default selection to the first item in the array
         fragmentGeneralsBinding.coursesspinner.setSelection(0);
-
+        fragmentGeneralsBinding.coursesspinner.setEnabled(false);
 
 
         // Create an ArrayAdapter Type Gardu to populate the Spinner
@@ -65,6 +67,7 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
         fragmentGeneralsBinding.garduSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
         // Set default selection to the first item in the array
         fragmentGeneralsBinding.garduSpinner.setSelection(0);
+        fragmentGeneralsBinding.garduSpinner.setEnabled(false);
 
 
         // Create an ArrayAdapter Type Gardu to populate the Spinner
@@ -79,6 +82,26 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
         fragmentGeneralsBinding.printSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
         // Set default selection to the first item in the array
         fragmentGeneralsBinding.printSpinner.setSelection(0);
+        fragmentGeneralsBinding.printSpinner.setEnabled(false);
+
+        cfg = Config.getInstance2(requireContext());
+
+        int garduID = cfg.getGarduID();
+        Log.i("gardu id", " "+garduID);
+        if (garduID == 0) {
+            fragmentGeneralsBinding.gardu.setText("0");
+        } else {
+            fragmentGeneralsBinding.gardu.setText(String.valueOf(garduID));
+        }
+
+
+        int gerbangNumber = cfg.getGerbangNumber();
+        Log.i("getGerbangNumber", " "+garduID);
+        if (gerbangNumber == 0) {
+            fragmentGeneralsBinding.gerbang.setText("0");
+        } else {
+            fragmentGeneralsBinding.gerbang.setText(String.valueOf(gerbangNumber));
+        }
 
         return fragmentGeneralsBinding.getRoot();
     }
@@ -86,6 +109,7 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
 
         // Set nilai dari ViewModel ke input field
         sharedViewModel.getMidBRI().observe(getViewLifecycleOwner(), fullName -> {
@@ -140,12 +164,12 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
                 fragmentGeneralsBinding.gardu.requestFocus();
                 return;
             }
-           if (uid.isEmpty()) {
+            if (uid.isEmpty()) {
                 fragmentGeneralsBinding.uid.setError("Input tidak boleh kosong");
                 fragmentGeneralsBinding.uid.requestFocus();
                 return;
             }
-             if (ipPcs.isEmpty()) {
+            if (ipPcs.isEmpty()) {
                 fragmentGeneralsBinding.ipPcs.setError("Input tidak boleh kosong");
                 fragmentGeneralsBinding.ipPcs.requestFocus();
                 return;
@@ -165,10 +189,13 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
             String cabangInput2 = sharedViewModel.getCabang().getValue();
             String gardInput2 = sharedViewModel.getGardu().getValue();
             String selectKompany = sharedViewModel.getInstitutionCompany().getValue();
-
+            String garduConfig =  fragmentGeneralsBinding.gardu.getText().toString();
+            cfg.setGarduID(Integer.parseInt(garduConfig));
+            String gerbangNumber =  fragmentGeneralsBinding.gerbang.getText().toString();
+            cfg.setGerbangNumber(Integer.parseInt(gerbangNumber));
             Toast.makeText(requireContext(),
-                    "Input FirstFragment: " + institutionCodeInput + ", " + cabangInput2 +
-                            "\nInput SecondFragment: " + selectKompany,
+                    "Input garduConfig: " + garduConfig + ", " +
+                            "\nInput gerbangNumber: " + gerbangNumber,
                     Toast.LENGTH_LONG).show();
 
 
@@ -178,9 +205,7 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
         });
 
 
-
-
-}
+    }
 
     private void MoveToMandiriFragment() {
         TabLayout tabLayout = requireActivity().findViewById(R.id.simpleTabLayout);
@@ -211,17 +236,17 @@ public class GeneralFragment extends Fragment implements AdapterView.OnItemSelec
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String selectedCompany = adapterView.getItemAtPosition(i).toString();
-        Log.i("","adapterView.getId()  "+adapterView.getId() );
+        Log.i("", "adapterView.getId()  " + adapterView.getId());
         if (adapterView.getId() == R.id.gardu_spinner) {
             selectedGardu = adapterView.getItemAtPosition(i).toString();
-            Log.i("","selectedGardu "+selectedGardu);
+            Log.i("", "selectedGardu " + selectedGardu);
 
         } else if (adapterView.getId() == R.id.print_spinner) {
             selectedVoltage = adapterView.getItemAtPosition(i).toString();
-            Log.i("","selectedVoltage "+selectedVoltage);
-        }else {
+            Log.i("", "selectedVoltage " + selectedVoltage);
+        } else {
             kompany = adapterView.getItemAtPosition(i).toString();
-            Log.i("","kompany "+kompany);
+            Log.i("", "kompany " + kompany);
 
         }
 
