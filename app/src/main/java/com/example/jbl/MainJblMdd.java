@@ -1,5 +1,7 @@
 package com.example.jbl;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -21,9 +23,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.jbl.model.DinasData;
+import com.example.jbl.model.TarifRequest;
+import com.example.jbl.model.TcmCommand;
+import com.example.jbl.model.UserData;
 import com.example.jbl.tools.BluetoothConnecHandlers;
 import com.example.jbl.tools.MandiriEnableHelpers;
+import com.example.jbl.tools.MyFtpServer;
+import com.example.jbl.tools.MyHttpServer;
 import com.example.jbl.tools.ProgressUtils;
+import com.example.jbl.views.PeriodaActivityNew;
 import com.mdd.aar.deviceid.AarDeviceId;
 import com.mdd.aar.deviceid.DeviceEnvironment;
 import com.mdd.aar.deviceid.http.responses.UnlockAarResponse;
@@ -36,14 +45,18 @@ import com.medicom.organicdrv.utilsLib;
 
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import wangpos.sdk4.libbasebinder.Printer;
 
 public class MainJblMdd extends AppCompatActivity {
 
+    private static final int PERMISSION_EXTERNAL = 1;
     private String debugToken;
     private AarDeviceId aarDevice;
     private int idxDriver = halDriver.USE_WISEASY_ENGGINE;
@@ -58,6 +71,11 @@ public class MainJblMdd extends AppCompatActivity {
     ProgressBar progressBar;
     private static final int PERMISSION_REQUEST_CODE = 100;
     Printer mPrinter;
+    private Prepaid prep;
+    private Perioda perioda;
+    private Config cfg;
+    private MyFtpServer ftp;
+    private MyHttpServer http;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +84,9 @@ public class MainJblMdd extends AppCompatActivity {
         tv1 = (TextView) findViewById(R.id.tv1);
         btnTes = (Button) findViewById(R.id.tes_printer);
         progressBar = findViewById(R.id.progressBar);
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{ android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_EXTERNAL);
+        }
         btnTes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -82,7 +103,7 @@ public class MainJblMdd extends AppCompatActivity {
                             mPrinter.getPrinterStatus(staats);
                             mPrinter.setGrayLevel(3);
                             mPrinter.clearPrintDataCache();
-                            mPrinter.printString("Content Test Printer",20, Printer.Align.CENTER,true,true);
+                            mPrinter.printString("Content Test Printer",32, Printer.Align.CENTER,true,true);
                             mPrinter.printPaper(0);
                             mPrinter.printFinish();
 
@@ -93,6 +114,11 @@ public class MainJblMdd extends AppCompatActivity {
                 }.start();
             }
         });
+        cfg = Config.getInstance();
+        ftp = new MyFtpServer(this);
+        http = new MyHttpServer(httpResponseHandler);
+        // To Do Perioda Permission
+        perioda = Perioda.getInstance();
 
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_PHONE_STATE)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -126,25 +152,53 @@ public class MainJblMdd extends AppCompatActivity {
                     Log.d("debugResponse", debugResponse);
                     myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
                     myReader.activateDebug(this, debugResponse);
+
+                    // Activate Prepaid Thread
+                    prep = new Prepaid(callback, myReader);
+                    perioda.setPrepaidHandler(prep);
+                    Thread th = new Thread(prep);
+                    th.start();
+
                 } catch (Exception e) {
-                    String msg = e.getMessage();
-                    e.printStackTrace();
-                    try {
-                        nativeLibrary = new nativeLib(this, idxDriver);
-                        nativeLibrary.setRandom("0123456789AB0123456789AB");
-                        debugToken = nativeLibrary.generateDebugCert();
-                        UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
-                                DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,
-                                "1");
-                        String debugResponse = unlockAarResponse.getData().getDebugResponse();
-                        Log.d("debugResponse", debugResponse);
-                        myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
-                        myReader.activateDebug(this, debugResponse);
-                    } catch (Exception ex) {
-                        String msgs = e.getMessage();
-                        e.printStackTrace();
-                    }
+                    Log.d(TAG, "Init Reader: "+e.getMessage());
+//        String msg = e.getMessage();
+//        e.printStackTrace();
+//        try {
+//          nativeLibrary = new nativeLib(this, halDriver.USE_WISEASY_ENGGINE);
+//          nativeLibrary.setRandom(IMEI);//"0123456789AB0123456789AB");
+//          debugToken = nativeLibrary.generateDebugCert();
+//          UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
+//              DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,"1");
+//          String debugResponse = unlockAarResponse.getData().getDebugResponse();
+//          Log.d("debugResponse", debugResponse);
+//          myReader = new readerLib(this, true, halDriver.USE_WISEASY_ENGGINE);
+//          myReader.activateDebug(this, debugResponse);
+//        } catch (Exception ex) {
+//          String msgs = e.getMessage();
+//          e.printStackTrace();
+//        }
                 }
+
+
+//                } catch (Exception e) {
+//                    String msg = e.getMessage();
+//                    e.printStackTrace();
+//                    try {
+//                        nativeLibrary = new nativeLib(this, idxDriver);
+//                        nativeLibrary.setRandom("0123456789AB0123456789AB");
+//                        debugToken = nativeLibrary.generateDebugCert();
+//                        UnlockAarResponse unlockAarResponse = aarDevice.unlockLibrary("9ef471364bca478faf77f8cc0710b7c4",
+//                                DeviceEnvironment.UNLOCK, aarDevice.getDeviceId(), debugToken,
+//                                "1");
+//                        String debugResponse = unlockAarResponse.getData().getDebugResponse();
+//                        Log.d("debugResponse", debugResponse);
+//                        myReader = new readerLib(this, true, halDriver.USE_WEPOY_ENGGINE);
+//                        myReader.activateDebug(this, debugResponse);
+//                    } catch (Exception ex) {
+//                        String msgs = e.getMessage();
+//                        e.printStackTrace();
+//                    }
+//                }
                 // Mandiri Library Enable Test di AsyncTask
                 try {
                     mandiriLibrary = new mandiriLib();
@@ -199,7 +253,7 @@ public class MainJblMdd extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(MainJblMdd.this, HomeActivity.class));
+        startActivity(new Intent(MainJblMdd.this, PeriodaActivityNew.class));
         finish();
 
     }
@@ -208,6 +262,62 @@ public class MainJblMdd extends AppCompatActivity {
 
     }
 
+    private final MyHttpServer.MyCallback httpResponseHandler = new MyHttpServer.MyCallback() {
+        @Override
+        public void onSetTarif(TarifRequest result) {
+            perioda.setTarif(result);
+        }
+        @Override
+        public void onTcmCommandOpen(TcmCommand.TcmCommandOpen result) {
+            perioda.OpenPerioda(result.id_pengawas, result.id_pultol, result.shift, false);
+        }
+        @Override
+        public void onTcmCommandClose(TcmCommand.TcmCommandClose result) {
+            perioda.ClosePerioda();
+        }
+        @Override
+        public void onSetUser(List<UserData> result) {
+            perioda.setUser(result);
+        }
+        @Override
+        public void onSetDinas(List<DinasData> result) {
+            perioda.setDinas(result);
+        }
+    };
+    private final Prepaid.MyCallback callback = new Prepaid.MyCallback() {
+        @Override
+        public void onSuccess(String result) {
+            runOnUiThread(() -> {
+                // Update UI with the result
+                //Toast.makeText(MainActivity.this, result, Toast.LENGTH_SHORT).show();
+                LocalDateTime l = LocalDateTime.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HH:mm:ss.SSS");
+//                txt4.setText(l.format(formatter));
+            });
+        }
+
+        @Override
+        public void onError(Exception e) {
+            runOnUiThread(() -> {
+                // Handle the error
+                Toast.makeText(MainJblMdd.this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        @Override
+        public void onInserted(int cardId, int cardType) {
+            runOnUiThread(() -> {
+//                txt1.setText(String.valueOf(cardId));
+            });
+        }
+
+        @Override
+        public void onRemoved(int cardId) {
+            runOnUiThread(() -> {
+//                txt1.setText("Removed");
+            });
+        }
+    };
     private void getbalance() throws Exception {
         byte[] uid = new byte[16];
         byte[] uidLen = new byte[1];
@@ -369,6 +479,7 @@ public class MainJblMdd extends AppCompatActivity {
                 }
 
                 break;
+
         }
 
     }
