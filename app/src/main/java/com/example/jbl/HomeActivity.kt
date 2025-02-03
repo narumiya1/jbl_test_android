@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.jbl.databinding.ActivityHomeBinding
 import com.example.jbl.views.PeriodaActivity
+import com.example.jbl.views.PeriodaActivityNew
 import com.example.jbl.views.SettingActivity
 import com.example.jbl.views.SystemAdminActivite
 
@@ -45,7 +46,7 @@ class HomeActivity : AppCompatActivity() {
             finish()
         }
         binding.perioda.setOnClickListener{
-            startActivity(Intent(this, PeriodaActivity::class.java))
+            startActivity(Intent(this, PeriodaActivityNew::class.java))
             finish()
         }
     }
