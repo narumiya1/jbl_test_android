@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.jbl"
-        minSdk 24
+        minSdk 27
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
@@ -33,6 +33,10 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/DEPENDENCIES'
     }
 }
 
@@ -81,4 +85,17 @@ dependencies {
     implementation(group: 'com.mdd.payment', name: 'organicdrv-release', version: '2.1.4', ext: 'aar')
     implementation(group: 'com.mdd.payment', name: 'wiseasylibrary-release', version: '1.0.2', ext: 'aar')
     implementation(group: 'com.mdd.payment', name: 'nativecripto-release', version: '2.0.1', ext: 'aar')
+
+    // Http Server
+    implementation files('libs/http-2.2.1.jar')
+    implementation files('libs/sun-common-server.jar')
+
+    // FTP Server
+//    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation files('libs/ftplet-api-1.1.1.jar')
+    implementation files('libs/ftpserver-core-1.1.1.jar')
+    implementation files('libs/log4j-1.2.17.jar')
+    implementation files('libs/mina-core-2.0.16.jar')
+    implementation files('libs/slf4j-api-1.7.21.jar')
+    implementation files('libs/slf4j-log4j12-1.7.21.jar')
 }
